@@ -1,0 +1,4 @@
+this is first line of the file
+this is second
+line like this
+30
