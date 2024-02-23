@@ -26,7 +26,7 @@ def alfabet(message):
     print(a)
     for i in range(ord('а'), ord('я')):
         print(chr(i), end='')
-        if a[0] == chr(i):
+        if a[0] == chr(i):# !!!!Нада сделать по всей длинне слова
             print(chr(i), 'Буква нашлась \n')
             creatingfolder = 'C:/Users/AdminX/PycharmProjects/pythonProject/folder/'+a[0]
             print("Это в глабальной среде путь base_path=.", creatingfolder)
