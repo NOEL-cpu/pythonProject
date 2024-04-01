@@ -36,5 +36,5 @@ current_time = datetime.datetime.now()
 print("Текущее время:", current_time)
 exemple_path = "C:/Users/AdminX/PycharmProjects/pythonProject/folder/e/exemple/info.txt" #для отдельного запуска
 
-zapros_na_slowo(exemple_path)
+#zapros_na_slowo(exemple_path)
 
