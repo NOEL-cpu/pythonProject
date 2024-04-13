@@ -2,18 +2,45 @@ import sys
 import os
 import datetime
 import countOpenWordInfo
+import re
 
 from pathlib import Path
+# def create_info_file(data):
+#     """
+#     Создает файл с именем info.txt и заполняет его данными.
+#     Каждая строка файла будет содержать пары ключ:значение из словаря.
+#
+#     Args:
+#     data (dict): Словарь с данными, которые будут записаны в файл.
+#     """
+#     info = {
+#     'Имя': 'Алексей',
+#     'Возраст': 28,
+#     'Город': 'Москва',
+#     'Профессия': 'Программист'}
+#     with open('info.txt', 'w', encoding='utf-8') as file:
+#         for key, value in  info.items():
+#             file.write(f"{key}:{value}\n")
 
 def read_increment_value(filename):
     # Проверяем существует ли файл
+    filename += '/info.txt'
     if not os.path.exists(filename):
-        # Если файл не существует, возвращаем начальное значение 0
-        with open(filename, 'w') as file:
-            print(file, "успешно создан")
-            file.write(str(0))
-            print(file, "успешно записаннно число 0")
-            return 0
+        # если нет файла
+        info = {
+        'количество запросов': '1',
+        'синоним': "-",
+        'антоним': '-',
+        'path_sound': '-'}
+
+        with open(filename, 'w', encoding='utf-8') as file:
+            for key, value in info.items():
+                 file.write(f"{key}:{value}\n")
+        # with open(filename, 'w') as file:
+        #     print(file, "успешно создан")
+        #     file.write(str(1))
+        #     print(file, "успешно записаннно число 1")
+        #     return 0
 
     # Читаем значение из файла
     with open(filename, 'r') as file:
@@ -29,9 +56,28 @@ def write_increment_value(filename, value):
 
 
 def zapros_na_slowo(exemple_path):
-    value = read_increment_value(exemple_path)
-    print("1  ", value)
-    write_increment_value(exemple_path, value + 1)
+    # когда слово уже существует однако нужно обновить количество просмотров
+    with open(exemple_path,  'r', encoding='utf-8') as file:
+        lines=file.readline()
+        for line in lines:
+            if 'количество' in lines:
+                print(line)
+                counter = re.search(r'\d+',lines)
+                print(type(counter))
+                counter_int= int(counter.group(0))
+                counter_int += 1
+                info = {
+                  'количество запросов': counter_int,
+                  'синоним': "-",
+                  'антоним': '-',
+                  'path_sound': '-'}
+                with open(exemple_path, 'w', encoding='utf-8') as file:
+                    for key, value in info.items():
+                        file.write(f"{key}:{value}\n")
+                return 0
+
+    print("1 повысил количество обращений ")
+
 
 
 
@@ -52,11 +98,35 @@ def resource_path(relative_path):
 # через tg бота?
 # a = str(input())
 
-
-# 2 Управление  анализатором лексемы для записи новых директорий с названиями
 def alfabet(message):
     a = message  # не создает для заглавных букв!!!
     print(a)
+
+
+    creatingfolder = 'C:/Users/AdminX/PycharmProjects/pythonProject/folder/' + a[0] + '/' + a
+    print("1Это в глабальной среде путь base_path=.", creatingfolder)
+     # Если заглавная буква существует то создавать папку заглавной не надо
+    if os.path.isdir(creatingfolder):  # если такое слово уже есть то добавим к счетчику простмотров +1
+        print("!Такое слово уже есть")
+        creatingfolder += '/info.txt'
+        zapros_na_slowo(creatingfolder)
+
+    if not os.path.isdir(creatingfolder):  # если ни буквы ни директории не существует
+        os.mkdir(creatingfolder) # это делает директорию
+        read_increment_value(creatingfolder)
+        print("3Это в глабальной среде путь base_path=.", creatingfolder)
+
+
+
+
+
+
+# 2 Управление  анализатором лексемы для записи новых директорий с названиями
+def alfabet0(message):
+    a = message  # не создает для заглавных букв!!!
+    print(a)
+
+
     for i in range(
             0x110000):  # range(ord('а'), ord('я')): #11000000 - длиной от 2 до 4 байт, в которых первый байт всегда имеет маску 11xxxxxx, а остальные — 10xxxxxx???
         print(chr(i), end='')
