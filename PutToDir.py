@@ -61,7 +61,7 @@ def zapros_na_slowo(exemple_path):
         lines=file.readline()
         for line in lines:
             if 'количество' in lines:
-                print(line)
+                print(lines)
                 counter = re.search(r'\d+',lines)
                 print(type(counter))
                 counter_int= int(counter.group(0))
