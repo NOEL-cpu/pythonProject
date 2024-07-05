@@ -70,7 +70,8 @@ async def echo_message(message: types.Message):  # эта функция выз�
     try:
         #65 подготовка имени картинки
         # Базовый URL
-        base_url = "D://1.2PythonTelegBot Dss//"
+        base_url = "C://Users//AdminX//PycharmProjects//pythonProject//folder//bankOfPictures//"
+        #D://1.2PythonTelegBot Dss//
         # Генерация случайной строки
         length = 8  # Длина случайной строки
         letters_and_digits = string.ascii_letters + string.digits
@@ -85,7 +86,6 @@ async def echo_message(message: types.Message):  # эта функция выз�
 
         #66 блок загрузки картинки
         await bot.download(message.photo[-1], destination=new_url)
-         #'C://Users//AdminX//PycharmProjects//pythonProject//folder//bankOfPicturess//ap.jpg'
          #   print (type(message.photo))
         print("отпавка фото успешно")
         #66
