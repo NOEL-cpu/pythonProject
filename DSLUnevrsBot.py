@@ -1,5 +1,7 @@
 import asyncio
 import logging
+import string
+import random
 
 from aiogram import Bot
 from aiogram import Dispatcher
@@ -40,17 +42,6 @@ async def handle_help(message: types.Message):
 
 @dp.message()
 async def echo_message(message: types.Message):  # эта функция вызвывается  каждый раз когда в тг что то проискходит
-    # await bot.send_message(
-    #     chat_id=message.chat.id,
-    #     text="Start processing...",
-    # )
-    # await bot.send_message(
-    #     chat_id=message.chat.id,
-    #     text="Detected message...",
-    #     reply_to_message_id=message.message_id,
-    # )
-
-
 
     await message.answer(
         text="I am start",)
@@ -61,56 +52,47 @@ async def echo_message(message: types.Message):  # эта функция выз�
 #блок перевода
         translator = Translator()
         translator_word = translator.translate(text11, src='en', dest='ru').text
-
-
-
-
-
         await message.answer(translator_word)
-
         print(text11, translator_word)
 #блок перевода end
         PutToDir.alfabet(text11)
        # print("2")
 
-        path1111 = str('D:/1.2PythonTelegBot Dss/apple.png')
-        # 'C:/Users/AdminX/PycharmProjects/pythonProject//folder/a/apple/apple.png'
-        chat_id = message.chat.id
-        chat_id_str = str(chat_id)
-        print("1блок отправки 111")
-        print(chat_id_str,chat_id,'object(chat_id_str)')
-        with open(path1111, "rb") as photo_file:
-            print('2файл открыт в  8 бит обьекте')
-            print('3ff', photo_file)
-            #photo_obj = types.file(path1111)
-
-            # await bot.send_photo(chat_id=callback_query.from_user.id, photo=photo_file)
-            # photo = InputFile("files/any_picture.png")
-            print("4!!!!!!!!!", type(message.chat.id), message.chat.id,)
-            print('5    ',chat_id_str)
-            #await message.answer_document(photo_file)
-            #   await message.answer_photo(photo_file)
-
-            await bot.send_photo(chat_id ,photo = photo_file)
-           # await bot.send_photo(chat_id_str, photo= photo_obj)
-
-            #  await send_image_to_telegram(path1111, chat_id)
-
-            print("1000отпавка фото успешно")
-        await translator(message)
     except ValueError as exc:
-        print('Искл  Value erorr1')
-        print(repr(exc.errors()[0]['type']))
+        print('Искл  Value erorr1 (потому что не текст')
+      #  print(repr(exc.errors()[0]['type']))
 
     except TypeError:
-        print('отработал exeception 70 str')
+        print('отработал exeption 70 str')
         await message.reply(text="Something new 🙂")
         print("3")
 
-    await bot.download(message.photo[-1], destination='D://1.2PythonTelegBot Dss//ap.jpg')
-    #'C://Users//AdminX//PycharmProjects//pythonProject//folder//bankOfPicturess//ap.jpg'
-     #   print (message.photo)
-     #   print (type(message.photo))
+    try:
+        #65 подготовка имени картинки
+        # Базовый URL
+        base_url = "D://1.2PythonTelegBot Dss//"
+        # Генерация случайной строки
+        length = 8  # Длина случайной строки
+        letters_and_digits = string.ascii_letters + string.digits
+        random_string = ''.join(random.choice(letters_and_digits) for i in range(length))
+        # Формирование имени файла
+        random_filename = random_string + ".jpg"
+        # Генерация нового URL
+        new_url = base_url + random_filename
+        # Вывод нового URL
+        print(new_url)
+        #65 end
+
+        #66 блок загрузки картинки
+        await bot.download(message.photo[-1], destination=new_url)
+         #'C://Users//AdminX//PycharmProjects//pythonProject//folder//bankOfPicturess//ap.jpg'
+         #   print (type(message.photo))
+        print("отпавка фото успешно")
+        #66
+    except ValueError as exc2:
+        print('Искл  Value erorr2 (потому что не картинка')
+
+
 
 async def main():
     logging.basicConfig(level=logging.DEBUG)
