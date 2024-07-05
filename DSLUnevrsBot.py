@@ -7,6 +7,7 @@ from aiogram import types
 from aiogram.filters import CommandStart, Command
 
 from aiogram.types import callback_query
+from googletrans import Translator
 
 import PutToDir
 import countOpenWordInfo
@@ -49,10 +50,28 @@ async def echo_message(message: types.Message):  # эта функция выз�
     #     reply_to_message_id=message.message_id,
     # )
 
+
+
     await message.answer(
-        text="I am ready",
-    )
+        text="I am start",)
     try:
+
+        await message.send_copy(chat_id=message.chat.id)
+        text11 = message.text
+#блок перевода
+        translator = Translator()
+        translator_word = translator.translate(text11, src='en', dest='ru').text
+
+
+
+
+
+        await message.answer(translator_word)
+
+        print(text11, translator_word)
+#блок перевода end
+        PutToDir.alfabet(text11)
+       # print("2")
 
         path1111 = str('D:/1.2PythonTelegBot Dss/apple.png')
         # 'C:/Users/AdminX/PycharmProjects/pythonProject//folder/a/apple/apple.png'
@@ -88,6 +107,10 @@ async def echo_message(message: types.Message):  # эта функция выз�
         await message.reply(text="Something new 🙂")
         print("3")
 
+    await bot.download(message.photo[-1], destination='D://1.2PythonTelegBot Dss//ap.jpg')
+    #'C://Users//AdminX//PycharmProjects//pythonProject//folder//bankOfPicturess//ap.jpg'
+     #   print (message.photo)
+     #   print (type(message.photo))
 
 async def main():
     logging.basicConfig(level=logging.DEBUG)
