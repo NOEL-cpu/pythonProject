@@ -104,4 +104,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-    print("4")
+    print("0 !!! Sn programm started")
