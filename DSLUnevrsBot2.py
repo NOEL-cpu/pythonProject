@@ -7,9 +7,11 @@ from aiogram import Bot
 from aiogram import Dispatcher
 from aiogram import types
 from aiogram.filters import CommandStart, Command
-from aiogram.types import InputFile
+from aiogram.types import FSInputFile
 from aiogram.types import callback_query
 from googletrans import Translator
+
+
 
 import PutToDir
 import countOpenWordInfo
@@ -49,54 +51,59 @@ async def echo_message(message: types.Message):  # эта функция выз�
     """
     await message.answer(
         text="I am start ",)
-    try:
+#33Блок блок отсылки картинки
+    photo22 = FSInputFile('D://1.2PythonTelegBot Dss//apple.jpg')
+    await bot.send_photo(chat_id=message.chat.id, photo=photo22)
+#33end
+    # try:
+    #
+    #      with open('D://1.2PythonTelegBot Dss//apple.jpg') as photofile:
+    #         chat_id1 = message.chat.id
+    #         print('2222', chat_id1)
+    #         print('3333',type(photofile))
+    #
+    #      await bot.send_photo(chat_id=chat_id1, photo=photofile)
+    #      await message.answer_photo(photofile, caption="new phpoto")
+    # except Exception as e:
+    #      await message.reply(f"Произошла ошибка: {e}")
+    #
+    # try:
+    #     photo22=InputFile('D://1.2PythonTelegBot Dss//apple.jpg')
+    #
+    #     await message.answer_photo(photo22, caption="new phpoto")
+    #
+    #
 
-         with open('D://1.2PythonTelegBot Dss//apple.jpg') as photofile:
-            chat_id1 = message.chat.id
-            print('2222', chat_id1)
-            print('3333',type(photofile), photofile.)
 
-         await bot.send_photo(chat_id=chat_id1, photo=photofile)
-         await message.answer_photo(photofile, caption="new phpoto")
-    except Exception as e:
-         await message.reply(f"Произошла ошибка: {e}")
-
-    try:
-        photo22=InputFile('D://1.2PythonTelegBot Dss//apple.jpg')
-
-        await message.answer_photo(photo22, caption="new phpoto")
-
-
-
-
-        await message.send_copy(chat_id=message.chat.id)
-        text11 = message.text
+    await message.send_copy(chat_id=message.chat.id)
+    text11 = message.text
 #блок перевода
-        translator = Translator()
-        translator_word = translator.translate(text11, src='en', dest='ru').text
-        await message.answer(translator_word)
-        print(text11, translator_word)
+    translator = Translator()
+    translator_word = translator.translate(text11, src='en', dest='ru').text
+    await message.answer(translator_word)
+    print(text11, translator_word)
 #блок перевода end
-        with open("C:/Users/AdminX/PycharmProjects/pythonProject/folder/l/lie/lie.jpg", 'rb') as photofile:
-            await bot.send_photo(photo= photofile)
-        pathOfpictureForSendUser='NOTPicture'
-        pathOfpictureForSendUser =PutToDir.alfabet(text11)
-
-        if(pathOfpictureForSendUser != 'NOTPicture'):
-          #  photo = InputFile(pathOfpictureForSendUser)
-            await message.reply_photo(photo='C:/Users/AdminX/PycharmProjects/pythonProject/folder/l/lie/lie.jpg')
+    #
+    # with open("C:/Users/AdminX/PycharmProjects/pythonProject/folder/l/lie/lie.jpg", 'rb') as photofile:
+    #         await bot.send_photo(photo= photofile)
+    #     pathOfpictureForSendUser='NOTPicture'
+    #     pathOfpictureForSendUser =PutToDir.alfabet(text11)
+    #
+    #     if(pathOfpictureForSendUser != 'NOTPicture'):
+    #       #  photo = InputFile(pathOfpictureForSendUser)
+    #         await message.reply_photo(photo='C:/Users/AdminX/PycharmProjects/pythonProject/folder/l/lie/lie.jpg')
 
 #блок отправки картинки пользователю если она есть
 
 
-    except ValueError as exc:
-        print('Искл  Value erorr1 (потому что не текст')
-      #  print(repr(exc.errors()[0]['type']))
-
-    except TypeError:
-        print('отработал exeption 70 str')
-        await message.reply(text="TypeError wrong 🙂")
-        print("3")
+    # except ValueError as exc:
+    #     print('Искл  Value erorr1 (потому что не текст')
+    #   #  print(repr(exc.errors()[0]['type']))
+    #
+    # except TypeError:
+    #     print('отработал exeption 70 str')
+    #     await message.reply(text="TypeError wrong 🙂")
+    #     print("3")
 
     try:
         #65 подготовка имени картинки
