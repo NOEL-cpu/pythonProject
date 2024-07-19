@@ -7,6 +7,7 @@ from aiogram import Bot
 from aiogram import Dispatcher
 from aiogram import types
 from aiogram.filters import CommandStart, Command
+from aiogram.types import FSInputFile
 
 from aiogram.types import callback_query
 from googletrans import Translator
@@ -47,7 +48,7 @@ async def echo_message(message: types.Message):  # эта функция выз�
         text="I am start",)
     try:
 
-        await message.send_copy(chat_id=message.chat.id)
+ #       await message.send_copy(chat_id=message.chat.id)
         text11 = message.text
 #блок перевода
         translator = Translator()
@@ -55,8 +56,19 @@ async def echo_message(message: types.Message):  # эта функция выз�
         await message.answer(translator_word)
         print(text11, translator_word)
 #блок перевода end
-        PutToDir.alfabet(text11)
-       # print("2")
+        print('!1000!')
+      #  PutToDir.alfabet(text11)
+#67
+        pathOfpictureForSendUser='NOTPicture'
+        pathOfpictureForSendUser =PutToDir.alfabet(text11)
+        print('!1111!',pathOfpictureForSendUser)
+        if(pathOfpictureForSendUser != 'NOTPicture'):
+            #33Блок блок отсылки картинки
+
+            photo22 = FSInputFile(pathOfpictureForSendUser)
+            await bot.send_photo(chat_id=message.chat.id, photo=photo22)
+#33end
+#end67
 
     except ValueError as exc:
         print('Искл  Value erorr1 (потому что не текст')
@@ -104,4 +116,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-    print("0 !!! Sn programm started")
+    print("4")
