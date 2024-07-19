@@ -32,23 +32,12 @@ async def handle_help(message: types.Message):
     text = "I'm and echo bot.\nSend me any message!"
     await message.answer(text=text)
 
-
-# @dp.message()
-# async def send_image_to_telegram(image_path, chat_id):
-# Открываем изображение
-# with open(image_path, 'rb') as photo:
-# Отправляем изображение через бота
-#  await bot.send_photo(chat_id=message.chat.id, photo)
-
-
 @dp.message()
 async def echo_message(message: types.Message):  # эта функция вызвывается  каждый раз когда в тг что то проискходит
 
     await message.answer(
         text="I am start",)
     try:
-
- #       await message.send_copy(chat_id=message.chat.id)
         text11 = message.text
 #блок перевода
         translator = Translator()
@@ -56,18 +45,14 @@ async def echo_message(message: types.Message):  # эта функция выз�
         await message.answer(translator_word)
         print(text11, translator_word)
 #блок перевода end
-        print('!1000!')
-      #  PutToDir.alfabet(text11)
-#67
+#67 Раскладка слова в директорию и ответ есть ли картинка для слова.
         pathOfpictureForSendUser='NOTPicture'
         pathOfpictureForSendUser =PutToDir.alfabet(text11)
         print('!1111!',pathOfpictureForSendUser)
         if(pathOfpictureForSendUser != 'NOTPicture'):
             #33Блок блок отсылки картинки
-
             photo22 = FSInputFile(pathOfpictureForSendUser)
             await bot.send_photo(chat_id=message.chat.id, photo=photo22)
-#33end
 #end67
 
     except ValueError as exc:
