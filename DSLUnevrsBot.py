@@ -47,12 +47,16 @@ async def echo_message(message: types.Message):  # эта функция выз�
 #блок перевода end
 #67 Раскладка слова в директорию и ответ есть ли картинка для слова.
         pathOfpictureForSendUser='NOTPicture'
-        pathOfpictureForSendUser =PutToDir.alfabet(text11)
+        InfoTxt=0
+        pathOfpictureForSendUser, InfoTxt =PutToDir.alfabet(text11)
         print('!1111!',pathOfpictureForSendUser)
+
         if(pathOfpictureForSendUser != 'NOTPicture'):
             #33Блок блок отсылки картинки
             photo22 = FSInputFile(pathOfpictureForSendUser)
             await bot.send_photo(chat_id=message.chat.id, photo=photo22)
+
+        await message.reply(text="Количество запросов = " + str(InfoTxt))
 #end67
 
     except ValueError as exc:

@@ -74,7 +74,7 @@ def zapros_na_slowo(exemple_path):
                 with open(exemple_path, 'w', encoding='utf-8') as file:
                     for key, value in info.items():
                         file.write(f"{key}:{value}\n")
-                return 0
+                return counter_int
 
     print("1 повысил количество обращений ")
 
@@ -108,9 +108,18 @@ def alfabet(message):
      # Если заглавная буква существует то создавать папку заглавной не надо
     if os.path.isdir(creatingfolder):  # если такое слово уже есть то добавим к счетчику простмотров +1
         print("!Такое слово уже есть")
+        pathOfpictureForSendUser = creatingfolder +'/'+ a +'.jpg'
+        pathOfpictureForSendUserPng = creatingfolder +'/'+ a +'.png'
         creatingfolder += '/info.txt'
-        zapros_na_slowo(creatingfolder)
+        InfoTXT= zapros_na_slowo(creatingfolder) # тут полчуим всю инфу по слову
+#44передача адреса картики
 
+        if os.path.isfile(pathOfpictureForSendUser):
+            return pathOfpictureForSendUser, InfoTXT
+        if os.path.isfile(pathOfpictureForSendUserPng):
+            return pathOfpictureForSendUserPng, InfoTXT
+        return "NOTPicture", InfoTXT
+##44 end
     if not os.path.isdir(creatingfolder):  # если ни буквы ни директории не существует
         os.mkdir(creatingfolder) # это делает директорию
         read_increment_value(creatingfolder)
@@ -122,7 +131,7 @@ def alfabet(message):
 
 
 # 2 Управление  анализатором лексемы для записи новых директорий с названиями
-def alfabet0(message):
+def alfabet0(message,pathOfpictureForSendUser):
     a = message  # не создает для заглавных букв!!!
     print(a)
 
@@ -141,6 +150,9 @@ def alfabet0(message):
 
                     creatingfolder += 'info.txt'
                     zapros_na_slowo(creatingfolder)
+                    pathOfpictureForSendUser = creatingfolder +'/'+ a +'.jpg'
+                    if os.path.isdir(pathOfpictureForSendUser):
+                        return pathOfpictureForSendUser
                  #  file3 = open(creatingfolder, 'w')  # тут необходимо организавать чтение либо дописывать +1
                  #  print("fadfa",file3)
 
