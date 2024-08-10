@@ -2,7 +2,7 @@ import os
 import re
 
 
-def walk_dir(path, counter_dirs=0, counter_subdirs=0):
+def walk_dir(path, counter_dirs=0, counter_subdirs=0, ):
     countMy = 0
     top_words = []
     for nameDir1 in os.listdir(path):
