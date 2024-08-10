@@ -12,7 +12,7 @@ def find_different_word(query, words):
 def send_image_if_exists(word):
     """Если у слова есть изображение, отправляем его."""
     image_files = [f for f in word.files if f.endswith(('.png', '.jpg', '.jpeg', '.gif'))]
-    
+
     if image_files:
         image_path = word.files[image_files[0]]
         # Здесь открываем и показываем изображение как пример, в реальном боте вы отправите его пользователю
@@ -51,11 +51,12 @@ if user_query == "подсказка":
     if different_word:
         print(f"Выбрано другое слово для второй подсказки: {different_word.name}")
         overlay_image_path = send_image_if_exists(different_word)
-        
+
         if overlay_image_path:
             # Дополнительная обработка изображения, если оно было найдено
             background = Image.open(first_image_path)
-            overlay = Image.open(overlay_image_path)
+            overlay = Image.open("D:/7 Photo/DDs-bot/4.png")
+           # overlay = Image.open(overlay_image_path)
 
             # Получаем размеры основного изображения
             bg_width, bg_height = background.size
@@ -70,7 +71,7 @@ if user_query == "подсказка":
             background.paste(overlay, position, overlay)
 
             # Сохранение результата
-            result_image_path = r"D:\7 Photo\DDs-bot\result.jpg"
+            result_image_path = "D:/7 Photo/DDs-bot/result.jpg"
             background.save(result_image_path)
 
             # Вывод результата
