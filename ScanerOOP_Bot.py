@@ -35,14 +35,14 @@ class DirectoryProcessor:
             break  # Останавливаем поиск глубже, так как info.txt находится на один уровень ниже
 
     def process_info_file(self, file, word):
-        """Обрабатывает файл info.txt и извлекает количество запросов."""
+        """Обрабатывает файл info.txt и извлекает количество запросов. """
         for line in file:
             if 'запросов' in line:
                 find_count = re.search(r'\d+', line)
                 if find_count:
                     fcount_int = int(find_count.group(0))
                     if fcount_int > 1:
-                        self.top_words.append(Word(word, fcount_int))
+                        self.top_words.append(Word(word, fcount_int))# создается экзэмпляр класса с именем word и кол-ом запросов
                     elif fcount_int == 1:
                         self.single_request_words.append(Word(word, fcount_int))
 
