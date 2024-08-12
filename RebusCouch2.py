@@ -9,13 +9,20 @@ class RebusImageProcessor:
         self.result_image_path = result_image_path
         self.current_image = None
         self.current_position = (0, 0)
-        self.overlay_offset = 20  # Смещение для каждой новой наложенной картинки
+        self.overlay_offset = 200  # Смещение для каждой новой наложенной картинки
         self.first_word = None
 
         # Инициализация
         self.processor.process_directory()
         self.first_image_path = None
 
+    def alg_choose_method (self,query, method):
+        method == "похожесть"
+        # Логика для поиска по похожести (например, по общим буквам)
+        for word in self.processor.get_top_words():
+            if word.name != query.name and len(set(query.name) & set(word.name)) > 2:  # Пример логики
+                return word
+        return None
     def find_different_word(self, query, method):
         """Находит слово в зависимости от выбранного метода."""
         if method == "антоним":
@@ -81,7 +88,7 @@ class RebusImageProcessor:
 
     def process_hint(self, user_query):
         """Обрабатывает запрос пользователя и возвращает путь к редактированному изображению."""
-        if user_query == "подсказка":
+        if user_query == "1":
             if self.first_word is None:
                 # Первый запрос на подсказку
                 self.first_word = self.get_random_word_with_bias()
@@ -96,10 +103,10 @@ class RebusImageProcessor:
                 # Выбираем случайный метод выбора слова для подсказки
                 methods = ["антоним", "похожесть", "автор"]
                 selected_method = random.choice(methods)
-
+                selected_method ="похожесть"
                 # Загружаем текущее изображение
                 self.load_image()
-                different_word = self.find_different_word(self.first_word, selected_method)
+                different_word  = self.get_random_word_with_bias()
                 if different_word:
                     print(f"Выбрано другое слово для следующей подсказки: {different_word.name} (Метод: {selected_method})")
                     overlay_image_path = self.send_image_if_exists(different_word)
@@ -123,7 +130,7 @@ def main():
     rebus_processor = RebusImageProcessor(path, result_image_path)
 
     # Первый шаг: выбрать случайное слово и отправить картинку
-    user_query = "подсказка"
+    user_query = "1"
     edited_image_path = rebus_processor.process_hint(user_query)
 
     if edited_image_path:
