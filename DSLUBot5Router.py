@@ -13,14 +13,18 @@ BOT_TOKEN = "5836801048:AAHrAtSk4LuGMQlITBn6Q3Cz91HxL_1mv94"
 
 
 
-#
+
 async def main():
     dp = Dispatcher()
     logging.basicConfig(level=logging.DEBUG)
     print("0")
+    bot = Bot(token=BOT_TOKEN)  # Экзэмпляр бот
     dp.include_router(main_router)
     # Создаем диспетчер и регистрируем роутер
-    bot = Bot(token=BOT_TOKEN)  # Экзэмпляр бот
+
+
+
+
 
 
 
