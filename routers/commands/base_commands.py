@@ -16,11 +16,19 @@ router = Router(name=__name__)
 
 @router.message(CommandStart())
 async def handle_start(message: types.Message):
-    keyboard = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="/Тренировка",)]])
-    keyboard1 = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="/подсказка",)]])
-    await message.answer(text=f"Hello, {message.from_user.full_name}!", reply_markup=keyboard)
-    await message.answer(text=f"Hello, {message.from_user.full_name}!", reply_markup=keyboard1)
+# Создаем клавиатуру с двумя кнопками
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="/Тренировка"), KeyboardButton(text="/подсказка")]
+        ],
+        resize_keyboard=True  # Делает кнопки меньше, чтобы они соответствовали размеру экрана
+    )
 
+    # Отправляем одно сообщение с клавиатурой
+    await message.answer(
+        text=f"Hello, {message.from_user.full_name}!",
+        reply_markup=keyboard
+    )
 
 @router.message(Command("help"))
 async def handle_help(message: types.Message):
@@ -32,46 +40,58 @@ async def handle_help(message: types.Message):
 async def echo_message(message: types.Message):
     await message.answer(text="I am start")
     try:
+
         text11 = message.text
+        await message.answer(text11)
         # Trenning
+        await message.answer(text="1")
         if text11.startswith("/"):
+            await message.answer(text="2")
             if text11 == '/Тренировка':
+                await message.answer(text="4")
                 path = 'C:\\Users\\AdminX\\PycharmProjects\\pythonProject\\folder'
-                result_image_path = "D:/7 Photo/DDs-bot/result.jpg"
+                result_image_path = "D:/7 Photo/DDs-bot/1.jpg"
                 rebus_processor = RebusImageProcessor(path, result_image_path)
                 user_query = text11
                 edited_image_path = rebus_processor.process_hint(user_query)
+                await message.answer(text="5")
+                # collect_images_main = collect_images(path)
+                await message.answer('D:\\7 Photo\\DDs-bot\\result.jpg')
+                photo1=FSInputFile('D:\\7 Photo\\DDs-bot\\result.jpg')
+                await message.answer_photo(photo= photo1)
+                word = "HELLO"
                 if edited_image_path:
-                    print(f"Редактированное изображение сохранено по пути: {edited_image_path}")
-                    Image.open(edited_image_path).show()
+                   # print(f"Редактированное изображение сохранено по пути: {edited_image_path}")
 
-                    while True:
-                        await message.answer(text="Введите команду посказка или конец")
-                        user_query = input("Введите команду ('1' или 'конец'): ")
-                        if user_query == "конец":
-                            break
-                        elif user_query == "1":
-                            edited_image_path = rebus_processor.process_hint(user_query)
 
-                            if edited_image_path:
-                                print(f"Редактированное изображение сохранено по пути: {edited_image_path}")
-                                Image.open(edited_image_path).show()
-                            else:
-                                print("Ошибка в обработке запроса.")
+                    await message.answer(text="8")
+                while True:
+                    if user_query == "конец" and user_query <= 4:
+                        break
+                    user_query = + 1
+                    edited_image_path = rebus_processor.process_hint(user_query)
+
+                   # if edited_image_path:
+                      #   await message.answer(text = {edited_image_path})
+            #  Image.open(edited_image_path).show()
+              #  await router.send_photo(chat_id=message.chat.id, photo=edited_image_path)
+                await message.answer_photo(chat_id=message.chat.id, photo='D:\\7 Photo/DDs-bot/1.jpg')
+
 
         # Блок перевода
         translator = Translator()
         translator_word = translator.translate(text11, src='en', dest='ru').text
         await message.answer(translator_word)
-        print(text11, translator_word)
+       # print(text11, translator_word)
 
         # Раскладка слова в директорию и ответ есть ли картинка для слова
         pathOfpictureForSendUser, InfoTxt = PutToDir.alfabet(text11)
-        print('!1111!', pathOfpictureForSendUser)
+        print(text= pathOfpictureForSendUser)
 
         if pathOfpictureForSendUser != 'NOTPicture':
             photo22 = FSInputFile(pathOfpictureForSendUser)
-            await bot.send_photo(chat_id=message.chat.id, photo=photo22)
+            photo22 = 'D:/7 Photo/DDs-bot/1.jpg'
+            await router.send_photo(chat_id=message.chat.id, photo=photo22)
 
         await message.reply(text="Количество запросов = " + str(InfoTxt))
 
