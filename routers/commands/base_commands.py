@@ -13,9 +13,12 @@ from RebusCouch2 import RebusImageProcessor
 
 router = Router(name=__name__)
 
+Sesions={}
 
 @router.message(CommandStart())
 async def handle_start(message: types.Message):
+    # идинтификация пользователя
+
     # Создаем клавиатуру с двумя кнопками
     keyboard = ReplyKeyboardMarkup(
         keyboard=[
@@ -42,6 +45,7 @@ async def handle_traning(message: types.Message):
     path = 'C:\\Users\\AdminX\\PycharmProjects\\pythonProject\\folder'
     result_image_path = "D:\\7 Photo\\DDs-bot\\result.jpg"
     rebus_processor = RebusImageProcessor(path, result_image_path)
+    Sesions[message.from_user.id]=rebus_processor
     # user_query = text11 тут не используется слово, набор будет
     rebus_processor.process_hint(1)
 
@@ -58,19 +62,20 @@ async def resume_traning(message: types.message):
     path = 'C:\\Users\\AdminX\\PycharmProjects\\pythonProject\\folder'
     result_image_path = "D:\\7 Photo\\DDs-bot\\result.jpg"
     user_try = 0
-
-    rebus_processor2 = RebusImageProcessor.process_hint(user_query="2")
-
+    rebus_processor2=Sesions[message.from_user.id]
+    
+    rebus_processor2.process_hint(user_query="2")
+    
     photo1 = FSInputFile('D:\\7 Photo\\DDs-bot\\result.jpg')
     await message.answer_photo(photo=photo1)
 
-    while True:
-        if user_try >= 4:
-            break
-        user_try = + 1
-        edited_image_path = rebus_processor2.process_hint(1)
-        photo2 = FSInputFile('D:\\7 Photo\\DDs-bot\\result.jpg')
-        await message.answer_photo(photo=photo2)
+    # while True:
+    #     if user_try >= 4:
+    #         break
+    #     user_try = + 1
+    #     rebus_processor2.process_hint(1)
+    #     photo2 = FSInputFile('D:\\7 Photo\\DDs-bot\\result.jpg')
+    #     await message.answer_photo(photo=photo2)
 
 
 @router.message()
