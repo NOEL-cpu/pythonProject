@@ -1,5 +1,7 @@
 import random
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
+from googletrans import Translator
+
 import ScanerOOP_Bot  # Импортируем созданный ранее модуль
 import os
 import asyncio
@@ -99,11 +101,51 @@ class RebusImageProcessor:
 
                 if self.first_image_path:
                     print(f"Первое слово: {self.first_word.name}")
-                    self.current_image = Image.open(self.first_image_path)
-                    self.save_image()
+                    # Открываем изображение
+                    image = Image.open(self.first_image_path)
+
+                    # Создаем объект для рисования
+                    draw = ImageDraw.Draw(image)
+
+                    # Указываем шрифт и размер текста
+                    font = ImageFont.truetype("arial.ttf", 80)  # Убедитесь, что файл шрифта доступен
+                    first_word=str(self.first_word.name)
+
+
+                    my_translate = Translator()
+                    translator_word = my_translate.translate(first_word, src='en', dest='ru').text
+
+                    # # Размеры изображения
+                    # width, height = image.size
+                    #
+                    # # Размеры текста
+                    # #text_width, text_height = draw.textsize(translator_word, font=font)
+                    #
+                    # # Позиция текста (внизу посередине)
+                    # position = ((width - 50) // 2, height - 100 )
+                    #
+                    # # Цвет текста (белый с черной обводкой)
+                    # draw.text(position, translator_word, font=font, fill="white", stroke_width=2, stroke_fill="black")
+
+                    draw.text(
+                        (150,300),translator_word,
+                        # Добавляем шрифт к изображению
+                        font = font,
+                        fill='#1C0606')
+
+                    image.show()
+
+                    # Сохраняем изображение
+                    image.save(self.result_image_path)
+                    print(f"Изображение сохранено по пути: {self.result_image_path}")
+                     #
+                     # self.save_image()
+                     # draw_text=Image
                     return self.result_image_path
             else:
                 # Выбираем случайный метод выбора слова для подсказки
+                # Кроме того эта часть включается только уже для 2 го вызыва подсказок и
+                # и использует уже записанный в буфере картинку
                 methods = ["антоним", "похожесть", "автор"]
                 selected_method = random.choice(methods)
                 selected_method ="похожесть"
@@ -124,6 +166,9 @@ class RebusImageProcessor:
         else:
             print("Некорректный запрос.")
             return None
+
+
+
 
 def collect_images(directory):
     image_extensions = ('.jpg', '.png', '.gif')

@@ -45,12 +45,12 @@ async def handle_traning(message: types.Message):
     path = 'C:\\Users\\AdminX\\PycharmProjects\\pythonProject\\folder'
     result_image_path = "D:\\7 Photo\\DDs-bot\\result.jpg"
     rebus_processor = RebusImageProcessor(path, result_image_path)
-    Sesions[message.from_user.id]=rebus_processor
+    Sesions[message.from_user.id]=rebus_processor #передали обьект класса в глобальную среду
     # user_query = text11 тут не используется слово, набор будет
     rebus_processor.process_hint(1)
 
-
-    await message.answer(text="5")
+    await message.answer(text="Выбираю")
+    await message.answer(text="Я думаю")
     # collect_images_main = collect_images(path)
     photo1 = FSInputFile('D:\\7 Photo\\DDs-bot\\result.jpg')
     await message.answer_photo(photo=photo1)
@@ -62,10 +62,10 @@ async def resume_traning(message: types.message):
     path = 'C:\\Users\\AdminX\\PycharmProjects\\pythonProject\\folder'
     result_image_path = "D:\\7 Photo\\DDs-bot\\result.jpg"
     user_try = 0
-    rebus_processor2=Sesions[message.from_user.id]
+    rebus_processor2=Sesions[message.from_user.id] # получили  обьект класса из глобальной среды
     
     rebus_processor2.process_hint(user_query="2")
-    
+    await message.answer(text="Я думаю")
     photo1 = FSInputFile('D:\\7 Photo\\DDs-bot\\result.jpg')
     await message.answer_photo(photo=photo1)
 
