@@ -16,7 +16,7 @@ router = Router(name=__name__)
 
 @router.message(CommandStart())
 async def handle_start(message: types.Message):
-# Создаем клавиатуру с двумя кнопками
+    # Создаем клавиатуру с двумя кнопками
     keyboard = ReplyKeyboardMarkup(
         keyboard=[
             [KeyboardButton(text="/Тренировка"), KeyboardButton(text="/подсказка")]
@@ -30,10 +30,47 @@ async def handle_start(message: types.Message):
         reply_markup=keyboard
     )
 
+
 @router.message(Command("help"))
 async def handle_help(message: types.Message):
     text = "I'm an echo bot.\nSend me any message!"
     await message.answer(text=text)
+
+@router.message(Command("Тренировка"))
+async def handle_traning(message: types.Message):
+    await message.answer(text="Тренировка началась")
+    path = 'C:\\Users\\AdminX\\PycharmProjects\\pythonProject\\folder'
+    result_image_path = "D:\\7 Photo\\DDs-bot\\result.jpg"
+    rebus_processor = RebusImageProcessor(path, result_image_path)
+    # user_query = text11 тут не используется слово, набор будет
+    rebus_processor.process_hint(1)
+
+
+    await message.answer(text="5")
+    # collect_images_main = collect_images(path)
+    photo1 = FSInputFile('D:\\7 Photo\\DDs-bot\\result.jpg')
+    await message.answer_photo(photo=photo1)
+
+
+@router.message(Command("подсказка"))
+async def resume_traning(message: types.message):
+    await message.answer(text="Тренировка продолжается")
+    path = 'C:\\Users\\AdminX\\PycharmProjects\\pythonProject\\folder'
+    result_image_path = "D:\\7 Photo\\DDs-bot\\result.jpg"
+    user_try = 0
+
+    rebus_processor2 = RebusImageProcessor.process_hint(user_query="2")
+
+    photo1 = FSInputFile('D:\\7 Photo\\DDs-bot\\result.jpg')
+    await message.answer_photo(photo=photo1)
+
+    while True:
+        if user_try >= 4:
+            break
+        user_try = + 1
+        edited_image_path = rebus_processor2.process_hint(1)
+        photo2 = FSInputFile('D:\\7 Photo\\DDs-bot\\result.jpg')
+        await message.answer_photo(photo=photo2)
 
 
 @router.message()
@@ -45,48 +82,17 @@ async def echo_message(message: types.Message):
         await message.answer(text11)
         # Trenning
         await message.answer(text="1")
-        if text11.startswith("/"):
-            await message.answer(text="2")
-            if text11 == '/Тренировка':
-                await message.answer(text="4")
-                path = 'C:\\Users\\AdminX\\PycharmProjects\\pythonProject\\folder'
-                result_image_path = "D:/7 Photo/DDs-bot/1.jpg"
-                rebus_processor = RebusImageProcessor(path, result_image_path)
-                user_query = text11
-                edited_image_path = rebus_processor.process_hint(user_query)
-                await message.answer(text="5")
-                # collect_images_main = collect_images(path)
-                await message.answer('D:\\7 Photo\\DDs-bot\\result.jpg')
-                photo1=FSInputFile('D:\\7 Photo\\DDs-bot\\result.jpg')
-                await message.answer_photo(photo= photo1)
-                word = "HELLO"
-                if edited_image_path:
-                   # print(f"Редактированное изображение сохранено по пути: {edited_image_path}")
-
-
-                    await message.answer(text="8")
-                while True:
-                    if user_query == "конец" and user_query <= 4:
-                        break
-                    user_query = + 1
-                    edited_image_path = rebus_processor.process_hint(user_query)
-
-                   # if edited_image_path:
-                      #   await message.answer(text = {edited_image_path})
-            #  Image.open(edited_image_path).show()
-              #  await router.send_photo(chat_id=message.chat.id, photo=edited_image_path)
-                await message.answer_photo(chat_id=message.chat.id, photo='D:\\7 Photo/DDs-bot/1.jpg')
 
 
         # Блок перевода
         translator = Translator()
         translator_word = translator.translate(text11, src='en', dest='ru').text
         await message.answer(translator_word)
-       # print(text11, translator_word)
+        # print(text11, translator_word)
 
         # Раскладка слова в директорию и ответ есть ли картинка для слова
         pathOfpictureForSendUser, InfoTxt = PutToDir.alfabet(text11)
-        print(text= pathOfpictureForSendUser)
+        print(text=pathOfpictureForSendUser)
 
         if pathOfpictureForSendUser != 'NOTPicture':
             photo22 = FSInputFile(pathOfpictureForSendUser)
@@ -96,10 +102,11 @@ async def echo_message(message: types.Message):
         await message.reply(text="Количество запросов = " + str(InfoTxt))
 
     except ValueError as exc:
+        print(exc.with_traceback())
         print('Искл Value erorr1 (потому что не текст)')
 
-    except TypeError:
-        print('Отработал exeption 70 str')
+    except TypeError as exc:
+        print('Отработал exeption 70 str', exc.with_traceback())
         await message.reply(text="Something new 🙂")
 
     try:
@@ -114,3 +121,5 @@ async def echo_message(message: types.Message):
 
     except ValueError as exc2:
         print('Искл Value erorr2 (потому что не картинка)')
+
+

@@ -22,12 +22,6 @@ async def main():
     dp.include_router(main_router)
     # Создаем диспетчер и регистрируем роутер
 
-
-
-
-
-
-
     await dp.start_polling(bot)
     print("Начался polling")
 

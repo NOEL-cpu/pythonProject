@@ -1,7 +1,8 @@
 import random
 from PIL import Image
 import ScanerOOP_Bot  # Импортируем созданный ранее модуль
-
+import os
+import asyncio
 class RebusImageProcessor:
     def __init__(self, directory_path, result_image_path):
         self.directory_path = directory_path
@@ -68,7 +69,8 @@ class RebusImageProcessor:
     def save_image(self):
         """Сохраняет текущее изображение в файл."""
         if self.current_image:
-            self.current_image.save(self.result_image_path)
+           self.current_image=  self.current_image.convert('RGB')
+           self.current_image.save(self.result_image_path)
 
     def overlay_image(self, overlay_image_path):
         """Накладывает новое изображение на текущее с учетом смещения."""
@@ -88,7 +90,8 @@ class RebusImageProcessor:
 
     def process_hint(self, user_query):
         """Обрабатывает запрос пользователя и возвращает путь к редактированному изображению."""
-        if user_query == "1":
+
+        if user_query != None:
             if self.first_word is None:
                 # Первый запрос на подсказку
                 self.first_word = self.get_random_word_with_bias()
@@ -122,26 +125,74 @@ class RebusImageProcessor:
             print("Некорректный запрос.")
             return None
 
+def collect_images(directory):
+    image_extensions = ('.jpg', '.png', '.gif')
+    collection = {}
+
+    for folder_name in os.listdir(directory):
+        folder_path = os.path.join(directory, folder_name)
+        if os.path.isdir(folder_path) and folder_name.isascii() and len(folder_name) == 1:
+            for file_name in os.listdir(folder_path):
+                if file_name.lower().endswith(image_extensions):
+                    file_path = os.path.join(folder_path, file_name)
+                    symbol = folder_name.upper()
+                    if symbol in collection:
+                        collection[symbol].append(file_path)
+                    else:
+                        collection[symbol] = [file_path]
+
+    return collection
+
+def match_word_with_images(word, image_collection):
+    matched_images = []
+    for letter in word.upper():
+        if letter in image_collection:
+            # Берем первое изображение из списка, соответствующего букве
+            matched_images.append(image_collection[letter][0])
+        else:
+            # Если буквы нет в коллекции, добавляем None или placeholder
+            matched_images.append(None)
+    return matched_images
+
+async def some_async_function():
+    print("Start sleeping...")
+    await asyncio.sleep(5)  # Ожидание 3 секунды
+    print("Awake now!")
+
 
 def main():
     # Инициализация класса для работы с изображениями
-    path = 'C:\\Users\\AdminX\\PycharmProjects\\pythonProject\\folder'
-    result_image_path = "D:/7 Photo/DDs-bot/result.jpg"
-    rebus_processor = RebusImageProcessor(path, result_image_path)
+    # Настроен на рботу с aiogramm, main нужен лишь для для дебага
+    # нужно стремится к тому что после отработки данной функции, происходила
+    # загрузка картинки в тг
 
+    path = 'C:\\Users\\AdminX\\PycharmProjects\\pythonProject\\folder'
+    result_image_path = "D:\\7 Photo\\DDs-bot\\result.jpg"
+    rebus_processor = RebusImageProcessor(path, result_image_path) #Инициализация
+    collect_images_main = collect_images(path)
+  #  word= get randonm word with big counter
+    word = "hello"
+    matched_images_main = match_word_with_images(word, collect_images_main)
+
+#############################
     # Первый шаг: выбрать случайное слово и отправить картинку
-    user_query = "1"
+    user_query = 'hello'
     edited_image_path = rebus_processor.process_hint(user_query)
 
     if edited_image_path:
         print(f"Редактированное изображение сохранено по пути: {edited_image_path}")
-        Image.open(edited_image_path).show()
+     #   Image.open(edited_image_path).show()
+     #!?! Передать наверх картинку отредактированную, но при этом при команде пользователя продолжить, программа
+    # должна знать. что это уже не первая подсказка и пользователю надо сместить на сколько, то картинку подсказку
 
     # Второй шаг: Обработка следующих запросов на подсказки
+    user_count=0
+    user_query="apple"
     while True:
-        user_query = input("Введите команду ('подсказка' или 'конец'): ")
-        if user_query == "конец":
+
+        if   user_count >= 4:
             break
+        user_count =+ 1
 
         edited_image_path = rebus_processor.process_hint(user_query)
 
