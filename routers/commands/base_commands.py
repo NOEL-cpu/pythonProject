@@ -1,5 +1,6 @@
 import random
 import string
+import time
 
 from PIL import Image
 from aiogram import Router, types
@@ -22,7 +23,9 @@ async def handle_start(message: types.Message):
     # Создаем клавиатуру с двумя кнопками
     keyboard = ReplyKeyboardMarkup(
         keyboard=[
-            [KeyboardButton(text="/Тренировка"), KeyboardButton(text="/подсказка")]
+            [KeyboardButton(text="/Тренировка"),
+             KeyboardButton(text="/подсказка"),
+             KeyboardButton(text="/Конец")]
         ],
         resize_keyboard=True  # Делает кнопки меньше, чтобы они соответствовали размеру экрана
     )
@@ -43,7 +46,7 @@ async def handle_help(message: types.Message):
 async def handle_traning(message: types.Message):
     await message.answer(text="Тренировка началась")
     path = 'C:\\Users\\AdminX\\PycharmProjects\\pythonProject\\folder'
-    result_image_path = "D:\\7 Photo\\DDs-bot\\result.jpg"
+    result_image_path = "D:\\7 Photo\\DDs-bot\\4.png"
     rebus_processor = RebusImageProcessor(path, result_image_path)
     Sesions[message.from_user.id]=rebus_processor #передали обьект класса в глобальную среду
     # user_query = text11 тут не используется слово, набор будет
@@ -52,8 +55,11 @@ async def handle_traning(message: types.Message):
     await message.answer(text="Выбираю")
     await message.answer(text="Я думаю")
     # collect_images_main = collect_images(path)
-    photo1 = FSInputFile('D:\\7 Photo\\DDs-bot\\result.jpg')
+    photo1 = FSInputFile('D:\\7 Photo\\DDs-bot\\4.png')
+    time.sleep(5)
+    await message.answer(text="Я подумал")
     await message.answer_photo(photo=photo1)
+    await message.answer(text="если вы не разгадали слово то")
 
 
 @router.message(Command("подсказка"))
@@ -66,8 +72,11 @@ async def resume_traning(message: types.message):
     
     rebus_processor2.process_hint(user_query="2")
     await message.answer(text="Я думаю")
-    photo1 = FSInputFile('D:\\7 Photo\\DDs-bot\\result.jpg')
+    photo1 = FSInputFile('D:\\7 Photo\\DDs-bot\\4.png')
     await message.answer_photo(photo=photo1)
+
+    # серриализация(сохранение) информации о текущем обекте для последующей тренировки ...info.txt
+
 
     # while True:
     #     if user_try >= 4:
@@ -77,7 +86,11 @@ async def resume_traning(message: types.message):
     #     photo2 = FSInputFile('D:\\7 Photo\\DDs-bot\\result.jpg')
     #     await message.answer_photo(photo=photo2)
 
-
+@router.message(Command("Конец"))
+async def handle_traning(message: types.Message):
+     await message.answer(text="я удаляю предыдущюю тренировку")
+     rebus_processor_end=Sesions[message.from_user.id]
+     rebus_processor_end.__del__()
 @router.message()
 async def echo_message(message: types.Message):
     await message.answer(text="I am start")
@@ -97,12 +110,12 @@ async def echo_message(message: types.Message):
 
         # Раскладка слова в директорию и ответ есть ли картинка для слова
         pathOfpictureForSendUser, InfoTxt = PutToDir.alfabet(text11)
-        print(text=pathOfpictureForSendUser)
+        print(pathOfpictureForSendUser)
 
         if pathOfpictureForSendUser != 'NOTPicture':
             photo22 = FSInputFile(pathOfpictureForSendUser)
-            photo22 = 'D:/7 Photo/DDs-bot/1.jpg'
-            await router.send_photo(chat_id=message.chat.id, photo=photo22)
+          #  photo22 = 'D:/7 Photo/DDs-bot/1.jpg'
+            await message.answer_photo( photo=photo22)
 
         await message.reply(text="Количество запросов = " + str(InfoTxt))
 

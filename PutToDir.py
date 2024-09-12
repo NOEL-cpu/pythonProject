@@ -124,7 +124,7 @@ def alfabet(message):
         os.mkdir(creatingfolder) # это делает директорию
         read_increment_value(creatingfolder)
         print("3Это в глабальной среде путь base_path=.", creatingfolder)
-
+        return creatingfolder, creatingfolder
 
 
 

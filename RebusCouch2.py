@@ -5,10 +5,11 @@ from googletrans import Translator
 import ScanerOOP_Bot  # Импортируем созданный ранее модуль
 import os
 import asyncio
+import time
 class RebusImageProcessor:
     def __init__(self, directory_path, result_image_path):
         self.directory_path = directory_path
-        self.processor = ScanerOOP_Bot.DirectoryProcessor(directory_path)
+        self.processor = ScanerOOP_Bot.DirectoryProcessor(directory_path) #rename like skaner OOP
         self.result_image_path = result_image_path
         self.current_image = None
         self.current_position = (0, 0)
@@ -18,6 +19,8 @@ class RebusImageProcessor:
         # Инициализация
         self.processor.process_directory()
         self.first_image_path = None
+        self.c_c = 0 #c_c count of call
+        self.l_w =6  #len_word
 
     def alg_choose_method (self,query, method):
         method == "похожесть"
@@ -71,7 +74,7 @@ class RebusImageProcessor:
     def save_image(self):
         """Сохраняет текущее изображение в файл."""
         if self.current_image:
-           self.current_image=  self.current_image.convert('RGB')
+           self.current_image=self.current_image.convert('RGB')
            self.current_image.save(self.result_image_path)
 
     def overlay_image(self, overlay_image_path):
@@ -85,7 +88,7 @@ class RebusImageProcessor:
 
         # Вычисление новой позиции с учетом смещения
         position = (self.current_position[0] + self.overlay_offset, self.current_position[1])
-        self.current_image.paste(overlay, position, overlay)
+        self.current_image.paste(overlay, position)
 
         # Обновляем текущую позицию для следующего наложения
         self.current_position = position
@@ -103,10 +106,11 @@ class RebusImageProcessor:
                     print(f"Первое слово: {self.first_word.name}")
                     # Открываем изображение
                     image = Image.open(self.first_image_path)
-
+                    time.sleep(2)
+                    print('1Выше этой строчки стоит таймер н 2 сек ')
                     # Создаем объект для рисования
-                    draw = ImageDraw.Draw(image)
 
+                    # блок прорисовки текста в будующем вынести в отдельную функцию
                     # Указываем шрифт и размер текста
                     font = ImageFont.truetype("arial.ttf", 80)  # Убедитесь, что файл шрифта доступен
                     first_word=str(self.first_word.name)
@@ -126,16 +130,22 @@ class RebusImageProcessor:
                     #
                     # # Цвет текста (белый с черной обводкой)
                     # draw.text(position, translator_word, font=font, fill="white", stroke_width=2, stroke_fill="black")
-
+                    time.sleep(2)
+                    draw = ImageDraw.Draw(image)
+                    time.sleep(2)
+                    print('2выше сделано строп на 4 сек')
                     draw.text(
                         (150,300),translator_word,
                         # Добавляем шрифт к изображению
                         font = font,
                         fill='#1C0606')
 
-                    image.show()
+                    #image.show()
 
                     # Сохраняем изображение
+                    #os.remove(self.result_image_path)
+                    time.sleep(2)
+                    print("Before save image")
                     image.save(self.result_image_path)
                     print(f"Изображение сохранено по пути: {self.result_image_path}")
                      #
@@ -146,9 +156,16 @@ class RebusImageProcessor:
                 # Выбираем случайный метод выбора слова для подсказки
                 # Кроме того эта часть включается только уже для 2 го вызыва подсказок и
                 # и использует уже записанный в буфере картинку
-                methods = ["антоним", "похожесть", "автор"]
+                methods = ["антоним", "похожесть", "автор", "побуквенно"]
                 selected_method = random.choice(methods)
                 selected_method ="похожесть"
+                # еще один алгоритм выбора слова для верхнего поторения, тупо для букв картинок
+                #
+
+
+                letter_association = self.get_l_a(self.c_c,self.l_w)
+                # временный возврат
+                return
                 # Загружаем текущее изображение
                 self.load_image()
                 different_word  = self.get_random_word_with_bias()
@@ -158,7 +175,9 @@ class RebusImageProcessor:
 
                     if overlay_image_path:
                         self.overlay_image(overlay_image_path)
+                        time.sleep(1)
                         self.save_image()
+                        time.sleep(1)
                         return self.result_image_path
                 else:
                     print("Другое слово не найдено.")
@@ -167,8 +186,25 @@ class RebusImageProcessor:
             print("Некорректный запрос.")
             return None
 
+    def get_l_a(self, count_call,len_word):
 
+        name = self.first_word.name
+        path3='C:\\Users\\AdminX\\PycharmProjects\\pythonProject\\folder\\'
+        path4=path3+name[self.c_c]+'\\'+name[self.c_c] +'.png'
+        print(path4 , " in letters ")
+        if count_call < len_word-1:
+            self.c_c=self.c_c + 1
+            # вызываем метод который  пересохранит result.png
+            self.current_image = Image.open(self.result_image_path)
+            #
+            self.overlay_image(path4)
+            time.sleep(1)
+            self.save_image()
+            time.sleep(1)
 
+    pass
+
+# Не забывай что выше это класс, и отступы для деф на 1 tab
 
 def collect_images(directory):
     image_extensions = ('.jpg', '.png', '.gif')
@@ -203,6 +239,15 @@ async def some_async_function():
     print("Start sleeping...")
     await asyncio.sleep(5)  # Ожидание 3 секунды
     print("Awake now!")
+
+def get_l_a(self):
+    scaner_OOP=self.processor()
+
+    f_w=self.first_word()
+     # scaner_OOP.
+    # тут надо взять первое слова разложить его по буквам, положить его  в счетичик вызовов подсказок в self области
+    # далее иторировать  по букве, но делать это выше, или в другой функции.
+    #хотя создание списка  где уже каждой букве соответствует адрсс может и
 
 
 def main():
