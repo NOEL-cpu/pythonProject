@@ -15,6 +15,7 @@ class RebusImageProcessor:
         self.current_position = (0, 0)
         self.overlay_offset = 200  # Смещение для каждой новой наложенной картинки
         self.first_word = None
+        self.first_word2 = None # Use in 2 place, one of it ( 90# Вычисление новой позиции с учетом смещения)
 
         # Инициализация
         self.processor.process_directory()
@@ -87,7 +88,11 @@ class RebusImageProcessor:
         overlay = overlay.resize((int(self.current_image.width / 4), int(self.current_image.height / 4)))
 
         # Вычисление новой позиции с учетом смещения
-        position = (self.current_position[0] + self.overlay_offset, self.current_position[1])
+        if self.first_word2 is None:
+            position = (self.current_position[0] , self.current_position[1])
+            self.first_word2='Notfirst'
+        else:
+            position = (self.current_position[0] + self.overlay_offset, self.current_position[1])
         self.current_image.paste(overlay, position)
 
         # Обновляем текущую позицию для следующего наложения
