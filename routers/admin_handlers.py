@@ -17,5 +17,5 @@ async def secret_admin_message(message: types.Message):
     F.from_user.id.in_(settings.admin_ids),
     F.text.regexp(r"(\d+)", mode=RegexpMode.MATCH).as_("code"),
 )
-async def handle_code(message: types.Message, code: Match[str]):
+async def handle_code(message: types.Message, code):
     await message.reply(f"Your code: {code.group()}")

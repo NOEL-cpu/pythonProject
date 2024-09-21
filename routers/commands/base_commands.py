@@ -6,6 +6,17 @@ from PIL import Image
 from aiogram import Router, types
 from aiogram.filters import CommandStart, Command
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, FSInputFile
+from aiogram.enums import ParseMode
+from aiogram.utils import markdown
+
+from keyboards.common_keyboards import (
+    ButtonText,
+    get_on_start_kb,
+    get_on_help_kb,
+    get_actions_kb,
+)
+from keyboards.inline_keyboards.info_kb import build_info_kb
+
 from googletrans import Translator
 
 import PutToDir
@@ -23,9 +34,8 @@ async def handle_start(message: types.Message):
     # Создаем клавиатуру с двумя кнопками
     keyboard = ReplyKeyboardMarkup(
         keyboard=[
-            [KeyboardButton(text="/Тренировка"),
-             KeyboardButton(text="/подсказка"),
-             KeyboardButton(text="/Конец")]
+            [KeyboardButton(text="/flashCardsStart"),
+             KeyboardButton(text="/ShowMyProgress")]
         ],
         resize_keyboard=True  # Делает кнопки меньше, чтобы они соответствовали размеру экрана
     )
@@ -91,6 +101,35 @@ async def handle_traning(message: types.Message):
      await message.answer(text="я удаляю предыдущюю тренировку")
      rebus_processor_end=Sesions[message.from_user.id]
      rebus_processor_end.__del__()
+
+
+
+@router.message(Command("more", prefix="!/"))
+async def handle_more(message: types.Message):
+    markup = get_actions_kb()
+    await message.answer(
+        text="Choose action:",
+        reply_markup=markup,
+    )
+
+@router.message(Command("more", prefix="!/"))
+async def handle_more(message: types.Message):
+    markup = get_actions_kb()
+    await message.answer(
+        text="Choose action:",
+        reply_markup=markup,
+    )
+
+
+@router.message(Command("flashCardsStart"))
+async def handle_info_command(message: types.Message):
+    markup = build_info_kb()
+    #1 подготовка 1 картинки, ее вывывод, подготовка логики для получения ответа о
+    await message.answer(
+        text="Ссылки и прочие ресурсы:",
+        reply_markup=markup,
+    )
+
 @router.message()
 async def echo_message(message: types.Message):
     await message.answer(text="I am start")

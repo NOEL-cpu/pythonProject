@@ -90,7 +90,8 @@ class RebusImageProcessor:
         # Вычисление новой позиции с учетом смещения
         if self.first_word2 is None:
             position = (self.current_position[0] , self.current_position[1])
-            self.first_word2='Notfirst'
+            self.first_word2='Notfirst' \
+                             ''
         else:
             position = (self.current_position[0] + self.overlay_offset, self.current_position[1])
         self.current_image.paste(overlay, position)
