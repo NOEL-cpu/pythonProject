@@ -34,8 +34,10 @@ async def handle_start(message: types.Message):
     # Создаем клавиатуру с двумя кнопками
     keyboard = ReplyKeyboardMarkup(
         keyboard=[
-            [KeyboardButton(text="/flashCardsStart"),
-             KeyboardButton(text="/ShowMyProgress")]
+            [KeyboardButton(text="/My progress"      ),
+             KeyboardButton(text="/flashCardsStart"  ),
+             KeyboardButton(text="/Memloud"          )]
+
         ],
         resize_keyboard=True  # Делает кнопки меньше, чтобы они соответствовали размеру экрана
     )
@@ -63,14 +65,14 @@ async def handle_traning(message: types.Message):
     rebus_processor.process_hint(1)
 
     await message.answer(text="Выбираю")
-    await message.answer(text="Я думаю")
+    await message.answer(text="Я обратился в твою базу знаний")
     # collect_images_main = collect_images(path)
     photo1 = FSInputFile('D:\\7 Photo\\DDs-bot\\4.png')
-    time.sleep(5)
+    time.sleep(1)
     await message.answer(text="Я подумал")
     await message.answer_photo(photo=photo1)
-    await message.answer(text="если вы не разгадали слово то")
-
+    await message.answer(text="если вы не разгадали слово то вы можете воспользоваться подсказкой")
+    await message.answer(text="ввести ответ:")
 
 @router.message(Command("подсказка"))
 async def resume_traning(message: types.message):
@@ -122,13 +124,49 @@ async def handle_more(message: types.Message):
 
 
 @router.message(Command("flashCardsStart"))
-async def handle_info_command(message: types.Message):
-    markup = build_info_kb()
-    #1 подготовка 1 картинки, ее вывывод, подготовка логики для получения ответа о
-    await message.answer(
-        text="Ссылки и прочие ресурсы:",
+# Обработчик команды "flashCardsStart"
+async def handle_training(message: types.Message):
+    await message.answer(text="Тренировка началась")
+
+    # Указание путей для работы с изображениями
+    path = 'C:\\Users\\AdminX\\PycharmProjects\\pythonProject\\folder'
+    result_image_path = "D:\\7 Photo\\DDs-bot\\4.png"
+
+    # Имитация работы с классом RebusImageProcessor
+    # Предположим, что он создает какое-то изображение
+    # Вам нужно будет интегрировать ваш класс RebusImageProcessor сюда
+    # rebus_processor = RebusImageProcessor(path, result_image_path)
+    # Sesions[message.from_user.id] = rebus_processor  # Сохраняем объект класса в глобальной среде
+    # rebus_processor.process_hint(1)  # Обрабатываем подсказку
+
+    await message.answer(text="Выбираю")
+    await message.answer(text="Я обратился в твою базу знаний")
+
+    # Загружаем изображение
+    photo = FSInputFile(result_image_path)
+
+    # Подождем немного (если это нужно)
+    time.sleep(1)
+
+    await message.answer(text="Я подумал")
+
+    # Создаем инлайн-клавиатуру с 5 кнопками
+    markup = get_actions_kb()
+    # Отправляем фото с текстом и инлайн-клавиатурой
+    sent_message = await message.answer_photo(
+        photo=photo,
+        caption="Это ваша картинка и описание с выбором кнопок.",
         reply_markup=markup,
+        reply_to_message_id=message.message_id  # Отправляем как ответ на сообщение пользователя
     )
+
+    # Возвращаем ID отправленного сообщения
+    sent_message_id = sent_message.message_id
+    await message.answer(text=f"ID этого сообщения: {sent_message_id}")
+
+    # Этот ID можно сохранить для будущих ответов, например, в базе данных или глобальном словаре
+    # Например: Sessions[message.from_user.id]["last_message_id"] = sent_message_id
+
 
 @router.message()
 async def echo_message(message: types.Message):
